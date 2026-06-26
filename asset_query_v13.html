@@ -863,7 +863,7 @@ function doSubmit() {
   fetch('https://script.google.com/macros/s/AKfycbzMqmKvdXv6QFgPnqDNVHp8lVtDqXnfycssUSMwC4pNEAYdxkGiR9pmY84vb7qZ62Xq_Q/exec', {
     method: 'POST',
     mode: 'no-cors',
-    headers: {'Content-Type': 'application/json'},
+    headers: {'Content-Type': 'text/plain'},
     body: JSON.stringify(payload)
   }).then(function() {
     document.getElementById('result-page').style.display='none';
