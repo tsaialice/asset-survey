@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>超尊科技｜個人資訊設備盤點</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Segoe UI', 'Microsoft JhengHei', sans-serif;
+  background: #FDF7EE; min-height: 100vh;
+  display: flex; flex-direction: column; align-items: center;
+  padding: 40px 16px;
+}
+.logo-bar {
+  width: 100%; max-width: 640px;
+  display: flex; align-items: center; gap: 12px; margin-bottom: 28px;
+}
+.logo-icon {
+  width: 46px; height: 46px; background: #4C7F9A; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  color: white; font-size: 22px;
+}
+.logo-text { font-size: 18px; font-weight: 700; color: #2d3748; }
+.logo-sub { font-size: 12px; color: #718096; margin-top: 2px; }
+.card {
+  background: white; border-radius: 20px;
+  box-shadow: 0 4px 28px rgba(76,127,154,0.10);
+  padding: 36px 32px; width: 100%; max-width: 640px;
+}
+.card-title { font-size: 22px; font-weight: 800; color: #2d3748; margin-bottom: 22px; }
+.notice-block {
+  background: #f7f9fa; border: 1.5px solid #d6e4ec;
+  border-radius: 14px; padding: 20px 22px; margin-bottom: 28px;
+}
+.notice-row {
+  display: flex; gap: 14px; padding: 9px 0;
+  border-bottom: 1px solid #edf2f7; font-size: 14px; line-height: 1.7;
+}
+.notice-row:last-child { border-bottom: none; }
+.notice-label { min-width: 76px; font-weight: 700; color: #4C7F9A; font-size: 13px; }
+.notice-val { color: #4a5568; flex: 1; }
+.notice-val ul { padding-left: 18px; }
+.notice-val li { margin-bottom: 3px; }
+.deadline { color: #c53030; font-weight: 700; }
+label { display: block; font-size: 13px; font-weight: 600; color: #4a5568; margin-bottom: 6px; }
+input[type=text], select, textarea {
+  width: 100%; padding: 10px 14px;
+  border: 1.5px solid #cbd5e0; border-radius: 8px;
+  font-size: 14px; color: #2d3748; outline: none;
+  transition: border-color .2s; font-family: inherit; background: white;
+}
+input[type=text]:focus, select:focus, textarea:focus { border-color: #4C7F9A; }
+.field-hint { font-size: 12px; color: #a0aec0; margin-top: 4px; }
+.form-group { margin-bottom: 20px; }
+.btn-primary {
+  width: 100%; padding: 14px; background: #4C7F9A; color: white;
+  border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background .2s; margin-top: 8px;
+}
+.btn-primary:hover { background: #3a6478; }
+.error-msg {
+  background: #fff5f5; border: 1px solid #fc8181;
+  border-radius: 8px; padding: 12px 16px;
+  color: #c53030; font-size: 14px; margin-top: 16px; display: none;
+}
+#result-page { display: none; }
+.welcome-bar {
+  background: linear-gradient(135deg, #4C7F9A, #95B7CA);
+  border-radius: 14px; padding: 20px 26px; color: white; margin-bottom: 28px;
+}
+.welcome-name { font-size: 22px; font-weight: 800; }
+.welcome-id { font-size: 13px; opacity: .85; margin-top: 4px; }
+.section-title {
+  font-size: 18px; font-weight: 700; color: #2d3748;
+  margin-bottom: 14px; display: flex; align-items: center; gap: 8px;
+}
+.blog { border-radius: 16px; padding: 22px 22px 18px; margin-bottom: 24px; }
+.blog-pc { background: #E8F2F7; border: 1.5px solid #b8d8e8; }
+.blog-equip { background: #FDF3E3; border: 1.5px solid #e8d5b0; }
+.blog-soft { background: #E4EFF5; border: 1.5px solid #b0cdd9; }
+.blog-phone { background: #FDF0D5; border: 1.5px solid #e6cc90; }
+.pc-card {
+  background: white; border-radius: 10px;
+  border: 1.5px solid #c9dfe9; padding: 16px 18px; margin-bottom: 10px;
+}
+.pc-card-title {
+  font-size: 15px; font-weight: 700; color: #2d3748;
+  display: flex; align-items: baseline; gap: 8px; margin-bottom: 12px;
+}
+.pc-card-note { font-size: 12px; font-weight: 400; color: #c53030; }
+.guide-link {
+  display: inline-flex; align-items: center; gap: 4px;
+  color: #4C7F9A; text-decoration: none; font-size: 12px;
+  font-weight: 600; padding: 3px 10px;
+  background: #e8f2f7; border-radius: 20px;
+  border: 1px solid #95B7CA; transition: background .15s;
+}
+.guide-link:hover { background: #d0e6f0; }
+
+/* Equipment */
+.equip-group { margin-bottom: 18px; }
+.equip-group:last-child { margin-bottom: 0; }
+.equip-group-title {
+  font-size: 13px; font-weight: 700; color: #2d3748;
+  margin-bottom: 10px; padding: 7px 14px;
+  background: rgba(255,255,255,0.7); border-radius: 8px;
+  display: flex; align-items: center; gap: 6px;
+  border: 1px solid rgba(0,0,0,0.06);
+}
+.equip-inner { padding: 0 2px; }
+.equip-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.equip-row:last-child { border-bottom: none; }
+.equip-icon { font-size: 17px; width: 24px; text-align: center; }
+.equip-label { flex: 1; font-size: 14px; color: #4a5568; }
+.equip-qty {
+  display: flex; align-items: center;
+  border: 1.5px solid #cbd5e0; border-radius: 8px; overflow: hidden;
+  background: white;
+}
+.qty-btn {
+  width: 32px; height: 32px; background: #f7fafc; border: none;
+  font-size: 16px; cursor: pointer; color: #4a5568;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.qty-btn:hover { background: #edf2f7; }
+.qty-num {
+  width: 38px; height: 32px; text-align: center;
+  border: none; border-left: 1.5px solid #cbd5e0; border-right: 1.5px solid #cbd5e0;
+  font-size: 14px; font-weight: 700; color: #2d3748; outline: none; padding: 0;
+}
+.equip-loc-row { padding: 12px 0 4px; }
+.equip-loc-row label { color: #4C7F9A; font-size: 12px; font-weight: 700; }
+.select-with-other { display: flex; flex-direction: column; gap: 8px; }
+.equip-divider { border: none; border-top: 1.5px dashed rgba(0,0,0,0.1); margin: 16px 0; }
+
+/* Device detail block */
+.device-detail {
+  display: none; margin-top: 10px;
+  background: white; border-radius: 8px;
+  border: 1.5px solid #cbd5e0; padding: 14px 16px;
+}
+.device-detail.show { display: block; }
+.device-detail-field { margin-bottom: 12px; }
+.device-detail-field:last-child { margin-bottom: 0; }
+.device-detail-field label { font-size: 12px; color: #4a5568; margin-bottom: 4px; }
+.spec-hint {
+  font-size: 11px; color: #95B7CA; margin-top: 3px; line-height: 1.5;
+}
+.has-device-toggle {
+  display: flex; gap: 16px; align-items: center; margin: 8px 0 4px;
+}
+.toggle-radio {
+  display: flex; align-items: center; gap: 5px;
+  font-size: 13px; color: #4a5568; cursor: pointer;
+}
+.toggle-radio input { cursor: pointer; accent-color: #4C7F9A; }
+
+/* Phone */
+.phone-opt {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 13px 14px; border: 1.5px solid rgba(0,0,0,0.10);
+  border-radius: 10px; cursor: pointer; transition: all .2s; margin-bottom: 8px;
+  background: white;
+}
+.phone-opt:hover { border-color: #95B7CA; background: #f7fbfd; }
+.phone-opt.selected { border-color: #4C7F9A; background: #e8f2f7; }
+.phone-opt input[type=radio] { margin-top: 2px; cursor: pointer; accent-color: #4C7F9A; }
+.phone-opt-text { font-size: 14px; color: #2d3748; font-weight: 600; }
+.phone-opt-sub { font-size: 12px; color: #a0aec0; margin-top: 2px; font-weight: 400; }
+.phone-detail { display: none; margin-top: 4px; padding: 14px 16px; background: white; border-radius: 10px; border: 1.5px solid #b8d8e8; }
+.phone-field { margin-bottom: 14px; }
+.phone-field:last-child { margin-bottom: 0; }
+
+/* Soft */
+.soft-steps { margin: 12px 0 16px; }
+.soft-step {
+  display: flex; gap: 10px; margin-bottom: 10px;
+  font-size: 13px; color: #4a5568; line-height: 1.6;
+}
+.soft-step-num {
+  min-width: 20px; height: 20px; background: #4C7F9A; color: white;
+  border-radius: 50%; font-size: 11px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center; margin-top: 2px;
+}
+.soft-step-code {
+  display: inline-block; background: white; border: 1px solid #b0cdd9;
+  border-radius: 4px; padding: 1px 7px; font-family: monospace;
+  font-size: 12px; color: #4C7F9A; margin: 0 2px;
+}
+
+/* Confirm */
+.confirm-opt {
+  display: flex; align-items: center; gap: 12px;
+  padding: 14px 16px; border: 1.5px solid #cbd5e0;
+  border-radius: 10px; cursor: pointer; transition: all .2s; margin-bottom: 10px;
+  background: white;
+}
+.confirm-opt:hover { border-color: #95B7CA; background: #f7fbfd; }
+.confirm-opt.selected { border-color: #4C7F9A; background: #e8f2f7; }
+.confirm-opt input[type=radio] { cursor: pointer; accent-color: #4C7F9A; }
+.remark-box { display: none; margin-top: 12px; }
+.remark-box textarea { min-height: 80px; resize: vertical; }
+.btn-submit {
+  width: 100%; padding: 14px; background: #95B7CA; color: white;
+  border: none; border-radius: 10px; font-size: 15px; font-weight: 700;
+  cursor: pointer; transition: background .2s; margin-top: 20px;
+}
+.btn-submit:hover { background: #7aa3b8; }
+#success-page { display: none; text-align: center; padding: 20px 0; }
+.success-icon { font-size: 64px; margin-bottom: 16px; }
+.success-title { font-size: 22px; font-weight: 800; color: #276749; margin-bottom: 8px; }
+.success-desc { font-size: 14px; color: #718096; line-height: 1.8; }
+.no-device-note {
+  color: #a0aec0; font-size: 14px; padding: 14px;
+  background: white; border-radius: 8px; border: 1.5px dashed #cbd5e0;
+}
+
+/* Validation */
+.field-error input[type=text],
+.field-error select,
+.field-error textarea { border: 3px solid #e53e3e !important; background: #fff5f5 !important; }
+.phone-opt.error-border { border: 3px solid #e53e3e !important; background: #fff5f5 !important; }
+.confirm-opt.error-border { border: 3px solid #e53e3e !important; background: #fff5f5 !important; }
+.pc-card.error-border { border: 3px solid #e53e3e !important; background: #fff5f5 !important; }
+
+/* Custom dialog */
+.custom-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,0.45); z-index: 1000;
+  align-items: center; justify-content: center;
+}
+.custom-overlay.show { display: flex; }
+.custom-dialog {
+  background: white; border-radius: 16px;
+  padding: 32px 28px; max-width: 420px; width: 90%;
+  box-shadow: 0 8px 40px rgba(0,0,0,0.18); text-align: center;
+}
+.custom-dialog-icon { font-size: 36px; margin-bottom: 12px; }
+.custom-dialog-msg { font-size: 20px; color: #2d3748; line-height: 1.7; margin-bottom: 24px; font-weight: 500; }
+.custom-dialog-btn {
+  padding: 12px 36px; background: #4C7F9A; color: white;
+  border: none; border-radius: 10px; font-size: 16px;
+  font-weight: 700; cursor: pointer; transition: background .2s;
+}
+.custom-dialog-btn:hover { background: #3a6478; }
+
+/* Large guide link */
+.guide-link-lg {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: white; text-decoration: none; font-size: 15px;
+  font-weight: 700; padding: 10px 18px;
+  background: #4C7F9A; border-radius: 10px;
+  border: none; transition: background .15s;
+  margin-top: 4px;
+}
+.guide-link-lg:hover { background: #3a6478; }
+.hw-guide-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  color: white; text-decoration: none; font-size: 13px;
+  font-weight: 700; padding: 6px 14px;
+  background: #95B7CA; border-radius: 8px;
+  border: none; transition: background .15s; margin-top: 6px;
+}
+.hw-guide-link:hover { background: #7aa3b8; }
+</style>
+</head>
+<body>
+<div class="logo-bar">
+  <div class="logo-icon">💻</div>
+  <div>
+    <div class="logo-text">超尊科技股份有限公司</div>
+    <div class="logo-sub">個人資訊設備盤點系統</div>
+  </div>
+</div>
+
+<!-- Login -->
+<div class="card" id="login-page">
+  <div class="card-title">個人設備資訊確認</div>
+  <div class="notice-block">
+    <div class="notice-row">
+      <div class="notice-label">📌 盤點目的</div>
+      <div class="notice-val">為確保公司資訊類資產（軟硬體）管理完整，請同仁協助確認名下的資訊設備現況及帳號等，以協助公司完成盤點作業及後續的維護工作。</div>
+    </div>
+    <div class="notice-row">
+      <div class="notice-label">📦 盤點範圍</div>
+      <div class="notice-val"><ul><li>資訊類設備（硬體設備、軟體帳號登錄盤點）</li><li>公務機設備（公司核發之手機及 SIM 卡）</li></ul></div>
+    </div>
+    <div class="notice-row">
+      <div class="notice-label">⏰ 繳回期限</div>
+      <div class="notice-val"><span class="deadline">請於 7 月 3 日（五）下班前完成回傳</span></div>
+    </div>
+    <div class="notice-row">
+      <div class="notice-label">📞 聯絡窗口</div>
+      <div class="notice-val">如有任何問題，請洽管理部 HR Anne</div>
+    </div>
+  </div>
+  <div class="form-group">
+    <label>員工代號</label>
+    <input type="text" id="emp-id" placeholder="例：SAT03099" />
+    <div class="field-hint">英文大小寫均可</div>
+  </div>
+  <div class="form-group">
+    <label>到職日期（民國）</label>
+    <input type="text" id="join-date" placeholder="例：7106622" />
+    <div class="field-hint">請直接輸入數字，格式：年月日（共7位，月日各2碼）</div>
+  </div>
+  <button class="btn-primary" onclick="doLogin()">查詢我的設備資訊</button>
+  <div class="error-msg" id="error-msg">❌ 員工代號或到職日有誤，請確認後再試。若持續無法登入，請聯繫管理部 HR Anne。</div>
+</div>
+
+<!-- Result -->
+<div class="card" id="result-page">
+  <div class="welcome-bar">
+    <div class="welcome-name" id="r-name"></div>
+    <div class="welcome-id" id="r-id"></div>
+  </div>
+
+  <!-- 電腦名稱 -->
+  <div class="blog blog-pc">
+    <div class="section-title">📦 電腦名稱</div>
+    <div id="device-list"></div>
+  </div>
+
+  <!-- 設備數量 -->
+  <div class="blog blog-equip">
+    <div class="section-title">🖥️ 設備數量確認</div>
+
+    <!-- 公司提供 -->
+    <div class="equip-group">
+      <div class="equip-group-title">🏢 公司提供的設備</div>
+      <div class="equip-inner">
+        <!-- 筆電 -->
+        <div class="equip-row">
+          <span class="equip-icon">💻</span>
+          <span class="equip-label">筆電</span>
+          <div class="equip-qty">
+            <button class="qty-btn" onclick="updateQtyDetails('co-nb',1)">＋</button>
+            <input class="qty-num" id="qty-co-nb" type="text" value="0" readonly />
+            <button class="qty-btn" onclick="updateQtyDetails('co-nb',-1)">－</button>
+          </div>
+        </div>
+        <div id="details-co-nb-wrap"></div>
+        <!-- 桌機 -->
+        <div class="equip-row">
+          <span class="equip-icon">🗄️</span>
+          <span class="equip-label">桌機</span>
+          <div class="equip-qty">
+            <button class="qty-btn" onclick="updateQtyDetails('co-dt',1)">＋</button>
+            <input class="qty-num" id="qty-co-dt" type="text" value="0" readonly />
+            <button class="qty-btn" onclick="updateQtyDetails('co-dt',-1)">－</button>
+          </div>
+        </div>
+        <div id="details-co-dt-wrap"></div>
+        <!-- 螢幕 -->
+        <div class="equip-row">
+          <span class="equip-icon">🖥️</span>
+          <span class="equip-label">螢幕</span>
+          <div class="equip-qty">
+            <button class="qty-btn" onclick="updateQtyDetails('co-mon',1)">＋</button>
+            <input class="qty-num" id="qty-co-mon" type="text" value="0" readonly />
+            <button class="qty-btn" onclick="updateQtyDetails('co-mon',-1)">－</button>
+          </div>
+        </div>
+        <div id="details-co-mon-wrap"></div>
+        <!-- 其他 -->
+        <div class="equip-row">
+          <span class="equip-icon">➕</span>
+          <span class="equip-label">其他</span>
+          <div style="flex:1;margin-left:8px;">
+            <input type="text" placeholder="請填寫設備名稱與數量" style="padding:6px 10px;font-size:13px;" />
+          </div>
+        </div>
+        <div class="equip-loc-row">
+          <label>📍 放置地點</label>
+          <div class="select-with-other">
+            <select id="co-loc-sel" onchange="onLocChange('co-loc-sel','co-loc-oth')">
+              <option value="">請選擇放置地點</option>
+              <option>桃園（中悅）</option><option>桃園（蘆竹）</option>
+              <option>竹北（博愛）</option><option>竹北（隘口）</option>
+              <option>竹東1F（浩氣）</option><option>其他</option>
+            </select>
+            <input type="text" id="co-loc-oth" placeholder="請輸入放置地點" style="display:none;" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="equip-divider">
+
+    <!-- 自購 -->
+    <div class="equip-group">
+      <div class="equip-group-title">🛒 自購設備</div>
+      <div class="equip-inner">
+        <div class="equip-row">
+          <span class="equip-icon">💻</span><span class="equip-label">筆電</span>
+          <div class="equip-qty">
+            <button class="qty-btn" onclick="changeQty('self-nb',1)">＋</button>
+            <input class="qty-num" id="qty-self-nb" type="text" value="0" readonly />
+            <button class="qty-btn" onclick="changeQty('self-nb',-1)">－</button>
+          </div>
+        </div>
+        <div class="equip-row">
+          <span class="equip-icon">🗄️</span><span class="equip-label">桌機</span>
+          <div class="equip-qty">
+            <button class="qty-btn" onclick="changeQty('self-dt',1)">＋</button>
+            <input class="qty-num" id="qty-self-dt" type="text" value="0" readonly />
+            <button class="qty-btn" onclick="changeQty('self-dt',-1)">－</button>
+          </div>
+        </div>
+        <div class="equip-row">
+          <span class="equip-icon">🖥️</span><span class="equip-label">螢幕</span>
+          <div class="equip-qty">
+            <button class="qty-btn" onclick="changeQty('self-mon',1)">＋</button>
+            <input class="qty-num" id="qty-self-mon" type="text" value="0" readonly />
+            <button class="qty-btn" onclick="changeQty('self-mon',-1)">－</button>
+          </div>
+        </div>
+        <div class="equip-row">
+          <span class="equip-icon">➕</span>
+          <span class="equip-label">其他</span>
+          <div style="flex:1;margin-left:8px;">
+            <input type="text" placeholder="請填寫設備名稱與數量" style="padding:6px 10px;font-size:13px;" />
+          </div>
+        </div>
+        <div class="equip-loc-row">
+          <label>📍 放置地點</label>
+          <div class="select-with-other">
+            <select id="self-loc-sel" onchange="onLocChange('self-loc-sel','self-loc-oth')">
+              <option value="">請選擇放置地點</option>
+              <option>桃園（中悅）</option><option>桃園（蘆竹）</option>
+              <option>竹北（博愛）</option><option>竹北（隘口）</option>
+              <option>竹東1F（浩氣）</option><option>其他</option>
+            </select>
+            <input type="text" id="self-loc-oth" placeholder="請輸入放置地點" style="display:none;" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="equip-divider">
+
+    <!-- 多餘 -->
+    <div class="equip-group">
+      <div class="equip-group-title">📦 多餘設備 <span style="font-weight:400;font-size:12px;color:#c53030;margin-left:4px;">（需拿回給管理部做確認）</span></div>
+      <div class="equip-inner">
+        <div class="equip-row">
+          <span class="equip-icon">💻</span><span class="equip-label">筆電</span>
+          <div class="equip-qty">
+            <button class="qty-btn" onclick="updateQtyDetails('ex-nb',1)">＋</button>
+            <input class="qty-num" id="qty-ex-nb" type="text" value="0" readonly />
+            <button class="qty-btn" onclick="updateQtyDetails('ex-nb',-1)">－</button>
+          </div>
+        </div>
+        <div id="details-ex-nb-wrap"></div>
+        <div class="equip-row">
+          <span class="equip-icon">🗄️</span><span class="equip-label">桌機</span>
+          <div class="equip-qty">
+            <button class="qty-btn" onclick="updateQtyDetails('ex-dt',1)">＋</button>
+            <input class="qty-num" id="qty-ex-dt" type="text" value="0" readonly />
+            <button class="qty-btn" onclick="updateQtyDetails('ex-dt',-1)">－</button>
+          </div>
+        </div>
+        <div id="details-ex-dt-wrap"></div>
+        <div class="equip-row">
+          <span class="equip-icon">🖥️</span><span class="equip-label">螢幕</span>
+          <div class="equip-qty">
+            <button class="qty-btn" onclick="updateQtyDetails('ex-mon',1)">＋</button>
+            <input class="qty-num" id="qty-ex-mon" type="text" value="0" readonly />
+            <button class="qty-btn" onclick="updateQtyDetails('ex-mon',-1)">－</button>
+          </div>
+        </div>
+        <div id="details-ex-mon-wrap"></div>
+        <div class="equip-row">
+          <span class="equip-icon">➕</span>
+          <span class="equip-label">其他</span>
+          <div style="flex:1;margin-left:8px;">
+            <input type="text" placeholder="請填寫設備名稱與數量" style="padding:6px 10px;font-size:13px;" />
+          </div>
+        </div>
+        <div class="equip-loc-row">
+          <label>📍 放置地點</label>
+          <div class="select-with-other">
+            <select id="ex-loc-sel" onchange="onLocChange('ex-loc-sel','ex-loc-oth')">
+              <option value="">請選擇放置地點</option>
+              <option>桃園（中悅）</option><option>桃園（蘆竹）</option>
+              <option>竹北（博愛）</option><option>竹北（隘口）</option>
+              <option>竹東1F（浩氣）</option><option>其他</option>
+            </select>
+            <input type="text" id="ex-loc-oth" placeholder="請輸入放置地點" style="display:none;" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 軟體 -->
+  <div class="blog blog-soft">
+    <div class="section-title">💿 軟體帳號登錄</div>
+    <div style="font-size:13px;color:#4a5568;margin-bottom:12px;line-height:1.6;">請確認您電腦中 Office 軟體目前登錄的帳號，並填入下方欄位。</div>
+    <div class="soft-steps">
+      <div class="soft-step"><div class="soft-step-num">1</div><div>開啟任一 Office 程式（如 Word、Excel）。</div></div>
+      <div class="soft-step"><div class="soft-step-num">2</div><div>點選左上角「檔案」→「帳戶」，即可看到目前登入的帳號。</div></div>
+      <div class="soft-step"><div class="soft-step-num">3</div><div>若顯示 <span class="soft-step-code">未登入</span> 或 <span class="soft-step-code">產品未啟用</span>，請在備註欄說明。</div></div>
+    </div>
+    <label>Microsoft Office 登錄帳號（Email）</label>
+    <input type="text" id="office-account" placeholder="例：yourname@sat.com.tw 或 yourname@outlook.com" oninput="validateEmail()" />
+    <div id="email-hint" style="font-size:12px;color:#e53e3e;margin-top:4px;display:none;">請輸入有效的 Email 格式（需包含 @ 與網域名稱）</div>
+  </div>
+
+  <!-- 公務機 -->
+  <div class="blog blog-phone">
+    <div class="section-title">📱 公務機設備</div>
+    <label class="phone-opt" id="phone-opt-no" onclick="selectPhone('no')">
+      <input type="radio" name="phone-main" value="no">
+      <div><div class="phone-opt-text">❌ 我沒有申辦公司公務機或 SIM 卡</div></div>
+    </label>
+    <label class="phone-opt" id="phone-opt-yes" onclick="selectPhone('yes')">
+      <input type="radio" name="phone-main" value="yes">
+      <div style="width:100%;">
+        <div class="phone-opt-text">✅ 我有申辦公司公務機</div>
+        <div class="phone-opt-sub">點選後請選擇申辦類型並填寫相關資訊</div>
+      </div>
+    </label>
+    <div class="phone-detail" id="phone-detail">
+      <div class="phone-field">
+        <label>申辦類型</label>
+        <select id="phone-type-sel" onchange="onPhoneTypeChange()">
+          <option value="">請選擇</option>
+          <option value="phone-sim">手機 ＋ SIM 卡</option>
+          <option value="phone-only">單獨手機（不含 SIM 卡）</option>
+          <option value="sim-only">單獨 SIM 卡（不含手機）</option>
+        </select>
+      </div>
+      <div id="phone-number-wrap" style="display:none;">
+        <div class="phone-field">
+          <label id="phone-number-label">手機號碼</label>
+          <input type="text" id="phone-number" placeholder="請填寫號碼" />
+        </div>
+        <div class="phone-field" id="phone-extra-wrap" style="display:none;">
+          <label id="phone-extra-label">備註</label>
+          <input type="text" id="phone-extra" placeholder="" />
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 確認 -->
+  <div style="margin-bottom:8px;">
+    <div class="section-title" style="margin-bottom:14px;">✅ 資訊確認</div>
+    <label class="confirm-opt" id="opt-correct" onclick="selectConfirm('correct')">
+      <input type="radio" name="confirm" value="correct">
+      <div style="font-size:14px;color:#2d3748;">✅ 以上設備資訊<strong>正確</strong>，沒有問題</div>
+    </label>
+    <label class="confirm-opt" id="opt-wrong" onclick="selectConfirm('wrong')">
+      <input type="radio" name="confirm" value="wrong">
+      <div style="font-size:14px;color:#2d3748;">⚠️ 有資訊<strong>不正確</strong>或需補充，我要備註說明</div>
+    </label>
+    <div class="remark-box" id="remark-box">
+      <textarea id="remark-text" placeholder="請說明哪些資訊有誤，或有哪些設備沒有被列出…"></textarea>
+    </div>
+    <button class="btn-submit" onclick="doSubmit()">送出確認</button>
+  </div>
+</div>
+
+<!-- Success -->
+<div class="card" id="success-page">
+  <div class="success-icon">🎉</div>
+  <div class="success-title">已成功送出！</div>
+  <div class="success-desc">感謝您完成設備資訊確認。<br>繳回期限：<strong>7 月 3 日（五）下班前</strong><br><br>如有任何問題，請洽管理部 HR Anne。</div>
+</div>
+
+<!-- Dialog -->
+<div class="custom-overlay" id="custom-overlay" onclick="hideAlert(event)">
+  <div class="custom-dialog">
+    <div class="custom-dialog-icon">⚠️</div>
+    <div class="custom-dialog-msg" id="custom-dialog-msg" style="font-size:20px;"></div>
+    <button class="custom-dialog-btn" onclick="hideAlert()">確定</button>
+  </div>
+</div>
+
+<script>
+var EMP_DATA = {"MSE01001":{"name":"張文華","join_date":"111/02/01","devices":[]},"MSE01002":{"name":"黃進乾","join_date":"111/02/01","devices":[]},"MSE02001":{"name":"杜成偉","join_date":"111/03/01","devices":[{"pc_name":"MSTu01","device_type":"桌上型電腦"}]},"MSE02006":{"name":"葉佳柔","join_date":"111/09/01","devices":[{"pc_name":"mset01","device_type":"桌上型電腦"}]},"MSE02008":{"name":"范凱傑","join_date":"112/06/01","devices":[{"pc_name":"MSE02008","device_type":"桌上型電腦"}]},"MSE02009":{"name":"劉明錚","join_date":"112/11/08","devices":[{"pc_name":"MSE02009","device_type":"桌上型電腦"}]},"MSE02010":{"name":"紀廣學","join_date":"115/03/09","devices":[{"pc_name":"未記錄","device_type":"桌上型電腦"}]},"SAT03002":{"name":"張正煌","join_date":"90/10/01","devices":[{"pc_name":"未記錄","device_type":"筆記型電腦"}]},"SAT03003":{"name":"張智能","join_date":"99/08/01","devices":[{"pc_name":"jack","device_type":"筆記型電腦"}]},"SAT03004":{"name":"張中誌","join_date":"101/08/01","devices":[{"pc_name":"SAT03004","device_type":"桌上型電腦"}]},"SAT03005":{"name":"曾松嵐","join_date":"99/12/31","devices":[]},"SAT03006":{"name":"王思忠","join_date":"99/10/08","devices":[{"pc_name":"COLIN","device_type":"筆記型電腦"}]},"SAT03012":{"name":"鍾佳瑋","join_date":"111/10/13","devices":[{"pc_name":"SAT03012","device_type":"筆記型電腦"}]},"SAT03014":{"name":"徐秀香","join_date":"96/10/02","devices":[{"pc_name":"SAT03014-PC1","device_type":"桌上型電腦"},{"pc_name":"SAT03014-PC2","device_type":"桌上型電腦"}]},"SAT03015":{"name":"彭婉柔","join_date":"97/06/09","devices":[{"pc_name":"SAT03015","device_type":"桌上型電腦"}]},"SAT03016":{"name":"王靜薇","join_date":"99/08/09","devices":[{"pc_name":"SAT03016","device_type":"桌上型電腦"}]},"SAT03019":{"name":"陳惠芬","join_date":"109/02/24","devices":[{"pc_name":"SAT03019","device_type":"桌上型電腦"}]},"SAT03030":{"name":"黃珮珊","join_date":"112/02/16","devices":[{"pc_name":"SAT03030","device_type":"桌上型電腦"}]},"SAT03032":{"name":"蔡文怡","join_date":"113/07/01","devices":[{"pc_name":"SAT03025","device_type":"桌上型電腦"}]},"SAT03033":{"name":"吳曄婷","join_date":"113/09/18","devices":[{"pc_name":"SAT03033","device_type":"桌上型電腦"}]},"SAT03034":{"name":"徐博弘","join_date":"113/10/01","devices":[{"pc_name":"未記錄","device_type":"筆記型電腦"},{"pc_name":"未記錄","device_type":"桌上型電腦"}]},"SAT03038":{"name":"翁宗德","join_date":"115/02/02","devices":[{"pc_name":"DESKTOP-07AJ7HU","device_type":"桌上型電腦"}]},"SAT03039":{"name":"陳芸芸","join_date":"115/06/01","devices":[{"pc_name":"SAT03024","device_type":"桌上型電腦"}]},"SAT03097":{"name":"陳志廣","join_date":"109/01/01","devices":[]},"SAT03098":{"name":"唐玉紋","join_date":"109/07/01","devices":[]},"SAT05002":{"name":"陳文暐","join_date":"99/06/10","devices":[]},"SAT05003":{"name":"黃欽輝","join_date":"99/06/10","devices":[{"pc_name":"SAT05003","device_type":"筆記型電腦"}]},"SAT05005":{"name":"蔡力行","join_date":"100/06/13","devices":[{"pc_name":"asai","device_type":"筆記型電腦"}]},"SAT05006":{"name":"林政維","join_date":"102/12/02","devices":[{"pc_name":"SAT05006","device_type":"筆記型電腦"}]},"SAT05011":{"name":"謝有為","join_date":"108/12/09","devices":[{"pc_name":"未記錄","device_type":"筆記型電腦"}]},"SAT05021":{"name":"林合聰","join_date":"107/03/01","devices":[{"pc_name":"SAT05021","device_type":"筆記型電腦"}]},"SAT05029":{"name":"湛曦","join_date":"108/07/01","devices":[{"pc_name":"SAT05029","device_type":"筆記型電腦"}]},"SAT05038":{"name":"張明君","join_date":"109/12/01","devices":[{"pc_name":"SAT05038","device_type":"筆記型電腦"}]},"SAT05043":{"name":"林純德","join_date":"110/03/02","devices":[{"pc_name":"未記錄","device_type":"筆記型電腦"}]},"SAT05044":{"name":"吳建威","join_date":"110/04/06","devices":[{"pc_name":"SAT05044","device_type":"筆記型電腦"}]},"SAT06003":{"name":"賴文薈","join_date":"109/07/16","devices":[{"pc_name":"SAT06003","device_type":"桌上型電腦"}]},"SAT06015":{"name":"林家豪","join_date":"111/04/11","devices":[{"pc_name":"SAT06015","device_type":"桌上型電腦"}]},"SAT06016":{"name":"李浚銨","join_date":"112/06/01","devices":[{"pc_name":"SAT06016","device_type":"桌上型電腦"}]},"SAT09012":{"name":"劉林立杰","join_date":"110/09/07","devices":[{"pc_name":"SAT09012","device_type":"筆記型電腦"}]},"SAT09025":{"name":"許李銓","join_date":"102/06/01","devices":[{"pc_name":"SAT09025","device_type":"桌上型電腦"}]},"SAT09046":{"name":"范德孟","join_date":"103/08/20","devices":[]},"SAT09062":{"name":"黃渝珊","join_date":"109/09/21","devices":[{"pc_name":"SAT09062","device_type":"桌上型電腦"}]},"SAT09063":{"name":"邱素君","join_date":"109/11/16","devices":[{"pc_name":"SAT09063","device_type":"桌上型電腦"}]},"SAT09076":{"name":"阮德河","join_date":"111/09/13","devices":[]},"SAT09079":{"name":"農明權","join_date":"112/11/16","devices":[]},"SAT09080":{"name":"阮黃勇","join_date":"112/11/16","devices":[]},"SAT09081":{"name":"范文勇","join_date":"113/05/14","devices":[]},"SAT09086":{"name":"洪那秀","join_date":"115/04/21","devices":[]},"SAT09087":{"name":"鄭惠心","join_date":"115/05/18","devices":[{"pc_name":"SAT03029","device_type":"桌上型電腦"}]}};
+
+
+function makeDetailBlock(prefix, deviceLabel, includeHW) {
+  var rows = '';
+  for (var n = 1; n <= 3; n++) {
+    var id = prefix + '-' + n;
+    var hwFields = includeHW ? (
+      '<div class="device-detail-field">' +
+        '<label>處理器（CPU）</label>' +
+        '<input type="text" id="cpu-'+id+'" placeholder="例：i5-10400" />' +
+      '</div>' +
+      '<div class="device-detail-field">' +
+        '<label>已安裝記憶體（RAM）</label>' +
+        '<input type="text" id="ram-'+id+'" placeholder="例：8GB" />' +
+        '<a class="hw-guide-link" href="hw_guide.html" target="_blank">👆 點我！了解如何查詢處理器與記憶體</a>' +
+      '</div>'
+    ) : '';
+    rows +=
+      '<div class="device-detail" id="detail-'+id+'" style="display:none;">' +
+        '<div style="font-size:12px;font-weight:700;color:#4C7F9A;margin-bottom:10px;">' + deviceLabel + ' 第' + n + '台</div>' +
+        '<div style="font-size:12px;color:#c53030;margin-bottom:10px;">若查無以下資訊，請填「無」</div>' +
+        '<div class="device-detail-field">' +
+          '<label>資產編號</label>' +
+          '<input type="text" id="asset-'+id+'" placeholder="請查看設備上的資產編號貼紙" />' +
+          '<div class="spec-hint">查詢方式：請查看設備上是否有貼紙，貼紙上標示「資產編號」等字樣</div>' +
+        '</div>' +
+        '<div class="device-detail-field">' +
+          '<label>品牌型號</label>' +
+          '<input type="text" id="model-'+id+'" placeholder="請填寫品牌與型號" />' +
+        '<div class="spec-hint">查詢方式：請查看設備上是否有貼紙，貼紙上標示「設備或型號」等字樣</div>' +
+        '</div>' +
+        hwFields +
+      '</div>';
+  }
+  return rows;
+}
+
+function updateQtyDetails(prefix, delta) {
+  var el = document.getElementById('qty-' + prefix);
+  var v = parseInt(el.value) + delta;
+  if (v < 0) v = 0;
+  if (v > 3) v = 3;
+  el.value = v;
+  for (var n = 1; n <= 3; n++) {
+    var det = document.getElementById('detail-' + prefix + '-' + n);
+    if (det) det.style.display = n <= v ? 'block' : 'none';
+  }
+}
+
+function dateToCompact(d) { return d.replace(/\//g,'').replace(/\s/g,''); }
+
+function doLogin() {
+  var rawId = document.getElementById('emp-id').value.trim().toUpperCase();
+  var rawDate = document.getElementById('join-date').value.trim().replace(/\s/g,'');
+  var errEl = document.getElementById('error-msg');
+  var emp = EMP_DATA[rawId];
+  if (!emp || dateToCompact(emp.join_date) !== rawDate) { errEl.style.display='block'; return; }
+  errEl.style.display = 'none';
+  document.getElementById('r-name').textContent = '您好，' + emp.name + '！';
+  document.getElementById('r-id').textContent = '員工代號：' + rawId;
+  var deviceList = document.getElementById('device-list');
+  deviceList.innerHTML = '';
+  if (emp.devices.length === 0) {
+    deviceList.innerHTML = '<div class="no-device-note">系統目前未記錄到您名下的電腦設備，如有設備請在下方備註說明。</div>';
+  } else {
+    emp.devices.forEach(function(d, i) {
+      var icon = d.device_type === '筆記型電腦' ? '💻' : '🗄️';
+      var label = icon + ' 電腦名稱' + (emp.devices.length > 1 ? '　' + (i+1) : '');
+      deviceList.innerHTML +=
+        '<div class="pc-card">' +
+          '<div class="pc-card-title">' + label +
+            '<span class="pc-card-note">請務必確認是否與電腦實際名稱相符</span>' +
+          '</div>' +
+          '<div style="margin-bottom:10px;"><input type="text" value="' + d.pc_name + '" placeholder="請填寫電腦名稱" /></div>' +
+          '<a class="guide-link" href="pc_name_guide.html" target="_blank">🔍 如何查詢我的電腦名稱？</a>' +
+        '</div>';
+    });
+  }
+  document.getElementById('login-page').style.display = 'none';
+  document.getElementById('result-page').style.display = 'block';
+  window.scrollTo(0, 0);
+}
+
+function onLocChange(selId, othId) {
+  document.getElementById(othId).style.display = document.getElementById(selId).value === '其他' ? 'block' : 'none';
+}
+
+function changeQty(key, delta) {
+  var el = document.getElementById('qty-' + key);
+  var v = parseInt(el.value) + delta;
+  if (v < 0) v = 0;
+  el.value = v;
+  // Show/hide detail block for co and ex groups
+  var detailEl = document.getElementById('detail-' + key);
+  if (detailEl) {
+    detailEl.classList.toggle('show', v > 0);
+  }
+}
+
+function validateEmail() {
+  var val = document.getElementById('office-account').value.trim();
+  var hint = document.getElementById('email-hint');
+  var inp = document.getElementById('office-account');
+  if (val === '') { hint.style.display='none'; inp.style.border=''; return; }
+  var valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+  hint.style.display = valid ? 'none' : 'block';
+  inp.style.border = valid ? '' : '3px solid #e53e3e';
+  inp.style.background = valid ? '' : '#fff5f5';
+}
+
+function selectPhone(val) {
+  document.getElementById('phone-opt-no').classList.toggle('selected', val === 'no');
+  document.getElementById('phone-opt-yes').classList.toggle('selected', val === 'yes');
+  document.getElementById('phone-detail').style.display = val === 'yes' ? 'block' : 'none';
+  document.querySelector('input[name="phone-main"][value="' + val + '"]').checked = true;
+}
+
+function onPhoneTypeChange() {
+  var sel = document.getElementById('phone-type-sel').value;
+  var wrap = document.getElementById('phone-number-wrap');
+  var lbl = document.getElementById('phone-number-label');
+  var inp = document.getElementById('phone-number');
+  var extraWrap = document.getElementById('phone-extra-wrap');
+  var extraLbl = document.getElementById('phone-extra-label');
+  if (!sel) { wrap.style.display='none'; return; }
+  wrap.style.display = 'block';
+  if (sel === 'phone-sim') {
+    lbl.textContent='手機號碼'; inp.placeholder='例：0912-345-678';
+    extraWrap.style.display='none';
+  } else if (sel === 'phone-only') {
+    lbl.textContent='手機號碼'; inp.placeholder='例：0912-345-678';
+    extraWrap.style.display='block'; extraLbl.textContent='手機型號（選填）';
+    document.getElementById('phone-extra').placeholder='例：iPhone 15';
+  } else {
+    lbl.textContent='SIM 卡門號'; inp.placeholder='例：0912-345-678';
+    extraWrap.style.display='none';
+  }
+}
+
+function selectConfirm(val) {
+  document.getElementById('opt-correct').classList.toggle('selected', val==='correct');
+  document.getElementById('opt-wrong').classList.toggle('selected', val==='wrong');
+  document.getElementById('remark-box').style.display = val==='wrong' ? 'block' : 'none';
+  document.querySelector('input[name="confirm"][value="' + val + '"]').checked = true;
+}
+
+function clearErrors() {
+  document.querySelectorAll('.field-error').forEach(function(el){el.classList.remove('field-error');});
+  document.querySelectorAll('.error-border').forEach(function(el){el.classList.remove('error-border');});
+}
+
+function showAlert(items) {
+  var count = items.length;
+  var listHtml = items.map(function(item,i){
+    return '<div style="text-align:left;padding:4px 0;">'+(i+1)+'.「'+item+'」</div>';
+  }).join('');
+  document.getElementById('custom-dialog-msg').innerHTML =
+    '<div style="margin-bottom:12px;">尚有以下 <strong>'+count+'</strong> 項必填項目未完成，請補齊後再送出：</div>'+
+    '<div style="background:#fff5f5;border-radius:8px;padding:12px 16px;margin-bottom:4px;">'+listHtml+'</div>';
+  document.getElementById('custom-overlay').classList.add('show');
+}
+
+function hideAlert(e) {
+  if (e && e.target !== document.getElementById('custom-overlay')) return;
+  document.getElementById('custom-overlay').classList.remove('show');
+}
+
+function doSubmit() {
+  clearErrors();
+  var missing = [];
+  // 1. 電腦名稱
+  var pcCards = document.querySelectorAll('#device-list .pc-card');
+  var pcMissing = false;
+  pcCards.forEach(function(card) {
+    var inp = card.querySelector('input[type=text]');
+    if (inp && !inp.value.trim()) { card.classList.add('error-border'); pcMissing=true; }
+  });
+  if (pcMissing) missing.push('電腦名稱');
+  // 2. 公司提供設備放置地點
+  var coLoc = document.getElementById('co-loc-sel');
+  if (coLoc && !coLoc.value) {
+    coLoc.style.border='3px solid #e53e3e'; coLoc.style.background='#fff5f5';
+    missing.push('公司設備放置地點');
+  } else if (coLoc && coLoc.value==='其他') {
+    var coLocOth = document.getElementById('co-loc-oth');
+    if (!coLocOth.value.trim()) { coLocOth.style.border='3px solid #e53e3e'; missing.push('公司設備放置地點（其他請填寫）'); }
+  }
+  // 3. Office 帳號
+  var officeAcc = document.getElementById('office-account');
+  if (!officeAcc.value.trim()) {
+    officeAcc.style.border='3px solid #e53e3e'; officeAcc.style.background='#fff5f5';
+    missing.push('Office 帳號');
+  } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(officeAcc.value.trim())) {
+    officeAcc.style.border='3px solid #e53e3e'; officeAcc.style.background='#fff5f5';
+    document.getElementById('email-hint').style.display='block';
+    missing.push('Office 帳號（格式不正確）');
+  }
+  // 4. 公務機
+  var phoneMain = document.querySelector('input[name="phone-main"]:checked');
+  if (!phoneMain) {
+    document.querySelectorAll('.phone-opt').forEach(function(el){el.classList.add('error-border');});
+    missing.push('公務機狀況');
+  } else if (phoneMain.value==='yes') {
+    var phoneType = document.getElementById('phone-type-sel');
+    if (!phoneType.value) {
+      phoneType.style.border='3px solid #e53e3e'; missing.push('公務機申辦類型');
+    } else {
+      var phoneNum = document.getElementById('phone-number');
+      if (!phoneNum.value.trim()) { phoneNum.style.border='3px solid #e53e3e'; missing.push('手機號碼'); }
+    }
+  }
+  // 5. 資訊確認
+  var confirmVal = document.querySelector('input[name="confirm"]:checked');
+  if (!confirmVal) {
+    document.querySelectorAll('.confirm-opt').forEach(function(el){el.classList.add('error-border');});
+    missing.push('資訊確認');
+  }
+  if (missing.length > 0) { showAlert(missing); return; }
+  // Collect all data
+  var empId = document.getElementById('emp-id') ? document.getElementById('emp-id').value.trim().toUpperCase() : '';
+  var joinDate = document.getElementById('join-date') ? document.getElementById('join-date').value.trim() : '';
+  var empName = document.getElementById('r-name') ? document.getElementById('r-name').textContent.replace('您好，','').replace('！','') : '';
+
+  // PC names
+  var pcInputs = document.querySelectorAll('#device-list input[type=text]');
+  var pcName1 = pcInputs[0] ? pcInputs[0].value : '';
+  var pcName2 = pcInputs[1] ? pcInputs[1].value : '';
+  var pcName3 = pcInputs[2] ? pcInputs[2].value : '';
+
+  // Helper to get detail field
+  function getVal(id) { var el=document.getElementById(id); return el ? el.value : ''; }
+  function getQty(id) { var el=document.getElementById(id); return el ? el.value : 0; }
+  function getSel(id) { var el=document.getElementById(id); return el ? el.value : ''; }
+
+  var payload = {
+    empId: empId, joinDate: joinDate, name: empName,
+    pcName1: pcName1, pcName2: pcName2, pcName3: pcName3,
+    // 公司提供
+    coNbQty: getQty('qty-co-nb'), coDtQty: getQty('qty-co-dt'), coMonQty: getQty('qty-co-mon'),
+    coOther: document.querySelector('.equip-group:nth-child(1) input[placeholder="請填寫設備名稱與數量"]') ? document.querySelector('.equip-group:nth-child(1) input[placeholder="請填寫設備名稱與數量"]').value : '',
+    coLoc: getSel('co-loc-sel') === '其他' ? getVal('co-loc-oth') : getSel('co-loc-sel'),
+    coNb1Asset: getVal('asset-co-nb-1'), coNb1Model: getVal('model-co-nb-1'), coNb1Cpu: getVal('cpu-co-nb-1'), coNb1Ram: getVal('ram-co-nb-1'),
+    coNb2Asset: getVal('asset-co-nb-2'), coNb2Model: getVal('model-co-nb-2'), coNb2Cpu: getVal('cpu-co-nb-2'), coNb2Ram: getVal('ram-co-nb-2'),
+    coDt1Asset: getVal('asset-co-dt-1'), coDt1Model: getVal('model-co-dt-1'), coDt1Cpu: getVal('cpu-co-dt-1'), coDt1Ram: getVal('ram-co-dt-1'),
+    coDt2Asset: getVal('asset-co-dt-2'), coDt2Model: getVal('model-co-dt-2'), coDt2Cpu: getVal('cpu-co-dt-2'), coDt2Ram: getVal('ram-co-dt-2'),
+    coMon1Asset: getVal('asset-co-mon-1'), coMon1Model: getVal('model-co-mon-1'),
+    coMon2Asset: getVal('asset-co-mon-2'), coMon2Model: getVal('model-co-mon-2'),
+    // 自購
+    selfNbQty: getQty('qty-self-nb'), selfDtQty: getQty('qty-self-dt'), selfMonQty: getQty('qty-self-mon'),
+    selfLoc: getSel('self-loc-sel') === '其他' ? getVal('self-loc-oth') : getSel('self-loc-sel'),
+    // 多餘
+    exNbQty: getQty('qty-ex-nb'), exDtQty: getQty('qty-ex-dt'), exMonQty: getQty('qty-ex-mon'),
+    exLoc: getSel('ex-loc-sel') === '其他' ? getVal('ex-loc-oth') : getSel('ex-loc-sel'),
+    exNb1Asset: getVal('asset-ex-nb-1'), exNb1Model: getVal('model-ex-nb-1'), exNb1Cpu: getVal('cpu-ex-nb-1'), exNb1Ram: getVal('ram-ex-nb-1'),
+    exNb2Asset: getVal('asset-ex-nb-2'), exNb2Model: getVal('model-ex-nb-2'), exNb2Cpu: getVal('cpu-ex-nb-2'), exNb2Ram: getVal('ram-ex-nb-2'),
+    exDt1Asset: getVal('asset-ex-dt-1'), exDt1Model: getVal('model-ex-dt-1'), exDt1Cpu: getVal('cpu-ex-dt-1'), exDt1Ram: getVal('ram-ex-dt-1'),
+    exDt2Asset: getVal('asset-ex-dt-2'), exDt2Model: getVal('model-ex-dt-2'), exDt2Cpu: getVal('cpu-ex-dt-2'), exDt2Ram: getVal('ram-ex-dt-2'),
+    exMon1Asset: getVal('asset-ex-mon-1'), exMon1Model: getVal('model-ex-mon-1'),
+    exMon2Asset: getVal('asset-ex-mon-2'), exMon2Model: getVal('model-ex-mon-2'),
+    // 軟體
+    officeAccount: getVal('office-account'),
+    // 公務機
+    phoneStatus: document.querySelector('input[name="phone-main"]:checked') ? document.querySelector('input[name="phone-main"]:checked').value : '',
+    phoneType: getSel('phone-type-sel'),
+    phoneNumber: getVal('phone-number'),
+    phoneModel: getVal('phone-extra'),
+    // 確認
+    confirm: document.querySelector('input[name="confirm"]:checked') ? document.querySelector('input[name="confirm"]:checked').value : '',
+    remark: getVal('remark-text')
+  };
+
+  // Send to Google Sheet
+  var btn = document.querySelector('.btn-submit');
+  btn.textContent = '送出中...'; btn.disabled = true;
+
+  fetch('https://script.google.com/macros/s/AKfycbzMqmKvdXv6QFgPnqDNVHp8lVtDqXnfycssUSMwC4pNEAYdxkGiR9pmY84vb7qZ62Xq_Q/exec', {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  }).then(function() {
+    document.getElementById('result-page').style.display='none';
+    document.getElementById('success-page').style.display='block';
+    window.scrollTo(0,0);
+  }).catch(function(err) {
+    btn.textContent = '送出確認'; btn.disabled = false;
+    alert('送出失敗，請稍後再試。');
+  });
+}
+
+
+// Inject dynamic detail blocks
+(function() {
+  var configs = [
+    {wrap:'details-co-nb-wrap', prefix:'co-nb', label:'筆電', hw:true},
+    {wrap:'details-co-dt-wrap', prefix:'co-dt', label:'桌機', hw:true},
+    {wrap:'details-co-mon-wrap', prefix:'co-mon', label:'螢幕', hw:false},
+    {wrap:'details-ex-nb-wrap', prefix:'ex-nb', label:'筆電', hw:true},
+    {wrap:'details-ex-dt-wrap', prefix:'ex-dt', label:'桌機', hw:true},
+    {wrap:'details-ex-mon-wrap', prefix:'ex-mon', label:'螢幕', hw:false},
+  ];
+  configs.forEach(function(c) {
+    var el = document.getElementById(c.wrap);
+    if (el) el.innerHTML = makeDetailBlock(c.prefix, c.label, c.hw);
+  });
+})();
+
+document.addEventListener('input', function(e) {
+  if (e.target.tagName==='INPUT'||e.target.tagName==='TEXTAREA') {
+    e.target.style.border=''; e.target.style.background='';
+    var card=e.target.closest('.pc-card'); if(card) card.classList.remove('error-border');
+    var fw=e.target.closest('.field-error'); if(fw) fw.classList.remove('field-error');
+  }
+});
+document.addEventListener('change', function(e) {
+  if (e.target.tagName==='SELECT') { e.target.style.border=''; e.target.style.background=''; }
+  if (e.target.name==='phone-main') document.querySelectorAll('.phone-opt').forEach(function(el){el.classList.remove('error-border');});
+  if (e.target.name==='confirm') document.querySelectorAll('.confirm-opt').forEach(function(el){el.classList.remove('error-border');});
+});
+document.addEventListener('keydown', function(e) {
+  if (e.key==='Enter' && document.getElementById('login-page').style.display!=='none') doLogin();
+});
+</script>
+</body>
+</html>
