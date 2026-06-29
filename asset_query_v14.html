@@ -395,7 +395,7 @@ errEl.style.display = 'none';
 fetch(SCRIPT_URL + '?action=getEmployee&empId=' + encodeURIComponent(rawId) + '&joinDate=' + encodeURIComponent(rawDate))
 .then(function(res) { return res.json(); })
 .then(function(data) {
-if (!data || data.error) {
+if (!data || data.result !== 'success') {
 errEl.style.display = 'block';
 btn.textContent = '查詢我的設備資訊';
 btn.disabled = false;
